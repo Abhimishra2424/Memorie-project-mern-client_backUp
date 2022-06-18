@@ -6,17 +6,22 @@ import memories from "./images/memories.png";
 import Form from "./components/Form/Form";
 import Posts from "./components/Posts/Posts";
 
+import useStyles from "./styles";
+
 const App = () => {
+  const classes = useStyles();
+
   return (
     <Container maxWidth="lg">
-      <AppBar position="static" color="primary">
-        <Typography variant="h2" align="center">
+      <AppBar position="static" color="primary" className={classes.appBar}>
+        <Typography variant="h2" align="center" className={classes.heading}>
           Memories
         </Typography>
         <img
           src={memories ? memories : "https://i.imgur.com/XqQXQ.png"}
           alt="memories"
           height={60}
+          className={classes.image}
         />
       </AppBar>
       <Grow in>
