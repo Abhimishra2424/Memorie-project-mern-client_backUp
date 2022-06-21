@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TextField, Button, Typography, Paper } from "@material-ui/core";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useStyles from "./styles";
 import FileBase from "react-file-base64";
 
-import { createPost } from "../../actions/posts";
+import { createPost, updatePost } from "../../actions/posts";
 
-const Form = () => {
+const Form = ({ setCurrentId, currentId }) => {
+  const post = useSelector((state) =>
+    currentId ? state.posts.find((post) => post._id === currentId) : null
+  );
+  console.log("single", post);
+
   const classes = useStyles();
   const dispatch = useDispatch();
   const [postData, setPostData] = useState({
@@ -17,10 +22,18 @@ const Form = () => {
     selectedFile: "",
   });
 
+  useEffect(() => {
+    if (post) setPostData(post);
+  }, [post]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    dispatch(createPost(postData));
+    if (currentId) {
+      dispatch(updatePost(currentId, postData));
+    } else {
+      dispatch(createPost(postData));
+    }
   };
 
   const clear = () => {};
@@ -34,7 +47,7 @@ const Form = () => {
         onSubmit={handleSubmit}
       >
         <Typography variant="h6">
-          {/* {currentId ? `Editing "${post.title}"` : "Creating a Memory"} */}
+          {currentId ? `Editing "${post.title}"` : "Creating a Memory"}
         </Typography>
         <TextField
           name="creator"
