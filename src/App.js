@@ -18,7 +18,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getPosts()); 
+    dispatch(getPosts());
   }, [currentId, dispatch]);
 
   return (
@@ -39,6 +39,7 @@ const App = () => {
           container
           justify="space-between"
           alignItems="stretch"
+          className={classes.mainContainer}
           spacing={3}
         >
           <Grid item xs={12} sm={7}>
