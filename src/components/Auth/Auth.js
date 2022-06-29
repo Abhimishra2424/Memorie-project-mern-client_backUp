@@ -8,24 +8,46 @@ import {
   Button,
 } from "@material-ui/core";
 // import { GoogleLogin } from "react-google-login";
+import { signin, signup } from "../../actions/auth";
 
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import useStyles from "./styles";
 
 import Input from "./Input";
-import Icon from "./Icon";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+// import Icon from "./Icon";
 
 const Auth = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   const [showPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
 
-  const handleSubmit = () => {
-    alert("You");
-  };
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleChange = () => {
-    console.log("You");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    let formData = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword,
+    };
+
+    if (isSignup) {
+      dispatch(signup(formData, history));
+    } else {
+      dispatch(signin(formData, history));
+    }
   };
 
   const handleShowPassword = () => {
@@ -60,14 +82,16 @@ const Auth = () => {
                 <Input
                   name="firstName"
                   label="First Name"
-                  handleChange={handleChange}
+                  value={firstName}
+                  handleChange={(e) => setFirstName(e.target.value)}
                   autoFocus
                   half
                 />
                 <Input
                   name="lastName"
                   label="Last Name"
-                  handleChange={handleChange}
+                  value={lastName}
+                  handleChange={(e) => setLastName(e.target.value)}
                   autoFocus
                   half
                 />
@@ -76,14 +100,16 @@ const Auth = () => {
             <Input
               name="email"
               label="Email Address"
-              handleChange={handleChange}
+              value={email}
+              handleChange={(e) => setEmail(e.target.value)}
               autoFocus
               type="email"
             />
             <Input
               name="password"
               label="Password"
-              handleChange={handleChange}
+              value={password}
+              handleChange={(e) => setPassword(e.target.value)}
               autoFocus
               type={showPassword ? "text" : "password"}
               handleShowPassword={handleShowPassword}
@@ -92,14 +118,14 @@ const Auth = () => {
               <Input
                 name="confirmPassword"
                 label="Confirm Password"
-                handleChange={handleChange}
+                value={confirmPassword}
+                handleChange={(e) => setConfirmPassword(e.target.value)}
                 type="password"
               />
             )}
           </Grid>
           <Button
             type="submit"
-            onClick={handleChange}
             fullWidth
             variant="contained"
             color="primary"
